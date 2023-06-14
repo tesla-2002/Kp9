@@ -100,6 +100,34 @@ bool is_sorted(Data* database, int size) { //Проверка отсортиро
     else return false;
 }
 
+bool is_revsorted(Data* database, int size) { //Проверка отсортированы ли данные в обратном порядке для дальнейшего применения бинарного ыпоиска
+    int flag = 0;
+    for (int i = 1; i < size; i++) {
+        if (database[i - 1]->key <= database[i]->key) {
+            flag = 1;
+            break;
+        }
+    }
+
+    if (flag == 0) return true;
+    else return false;
+}
+
+void reverse_data(Data* database, int size) { //Функция разворота данных
+    char temp_buffer[LEN_STR];
+    temp_buffer[LEN_STR - 1] = '\0';
+    int temp_key = 0;
+    for (int i = 0; i < size; i++) {
+        temp_key = database[i]->key;  //Обмен значениями через временные переменные 
+        database[i]->key = database[size - i - 1]->key;
+        database[size - i - 1]->key = temp_key;
+        strncpy(temp_buffer, database[i]->text, LEN_STR);
+        strncpy(database[i]->text, database[size - i - 1]->text, LEN_STR);
+        strncpy(database[size - i - 1]->text, temp_buffer, LEN_STR);
+    }
+}
+
+
 int binary_search(Data* database, int size, int find_key) { //Функция реализации бинарного поиска ключа
     int middle = 0, left = 0, right = size - 1, index = 0; //Переменные хранят индексы получаемых в алгоритме - серединных элементов, левой и правой границ и найденного ключа соответсвтенно
     while (left <= right) { //Пока левая граница не зашла за правую
