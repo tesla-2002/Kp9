@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
-        printf("\tUsage:\n%s FILE_KEY FILE_POEM\n", argv[0]);
+        printf("Введите:\n%s ./filekeys ./filedata\n", argv[0]);
         return 1;
     }
 
