@@ -21,6 +21,7 @@ bool is_sorted(Data* database, int size); //Проверка отсортиро�
 bool is_revsorted(Data* database, int size); //Проверка отсортированы ли данные в обратном порядке для дальнейшего применения бинарного ыпоиска
 void reverse_data(Data* database, int size); //Функция разворота данных    
 int binary_search(Data* database, int size, int find_key); //Функция реализации бинарного поиска ключа
+void rewrite_files (Data* database, FILE* file1, FILE* file2, int size); //Функция перезаписи файла
 void print_data(Data* database, int size); //Функция вывода таблицы
 void free_data(Data* database, int size); //Функция осовбождения памяти
 
