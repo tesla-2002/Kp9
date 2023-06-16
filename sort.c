@@ -117,7 +117,7 @@ void reverse_data(Data* database, int size) { //Функция разворот�
     char temp_buffer[LEN_STR];
     temp_buffer[LEN_STR - 1] = '\0';
     int temp_key = 0;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size/2; i++) {
         temp_key = database[i]->key;  //Обмен значениями через временные переменные 
         database[i]->key = database[size - i - 1]->key;
         database[size - i - 1]->key = temp_key;
@@ -147,6 +147,22 @@ int binary_search(Data* database, int size, int find_key) { //Функция р�
     }
 
     return -1;  //Если не произошел выход из функции до этого, значит элемент не был найден
+}
+
+void rewrite_files (Data* database, FILE* file1, FILE* file2, int size) { //Функция перезаписи файла
+    char temp_buffer[LEN_STR];
+    temp_buffer[LEN_STR - 1] = '\0';
+    int temp_key = 0;
+    for (int i = 0; i < size; i++) {
+        temp_key = database[i]->key;
+        if (i != size - 1) fprintf(file1, "%d\n", temp_key);
+        else fprintf(file1, "%d", temp_key);
+
+        strncpy(temp_buffer, database[i]->text, LEN_STR);
+        fputs(temp_buffer, file2);
+    }
+    rewind(file1);
+    rewind(file2);
 }
 
 void print_data(Data* database, int size) { //Функция вывода таблицы
