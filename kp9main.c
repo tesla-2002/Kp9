@@ -12,12 +12,12 @@ int main(int argc, char* argv[]) {
 
     FILE *filekeys, *filedata;
 
-    if ((filekeys = fopen(argv[1], "r")) == NULL) { //Проверка, откроется ли файл на чтение
+    if ((filekeys = fopen(argv[1], "r+")) == NULL) { //Проверка, откроется ли файл на чтение
         printf("Не удалось открыть файл");
         exit(1);
     }
 
-    if ((filedata = fopen(argv[2], "r")) == NULL) { //Проверка, откроется ли файл на чтение
+    if ((filedata = fopen(argv[2], "r+")) == NULL) { //Проверка, откроется ли файл на чтение
         printf("Не удалось открыть файл");
         exit(1);
     }
@@ -26,21 +26,25 @@ int main(int argc, char* argv[]) {
     enum {
         SORT = 1,
         SEARCH = 2,
-        PRINT = 3
+        PRINT = 3,
+        REWRITE = 4
     };
     size = getsize(filekeys);
     Data* database = calloc(size, sizeof(Data));
     read_data(database, filekeys, filedata);
-    fclose(filekeys);
-    fclose(filedata);
-
     while (1) {
         printf("Что Вы хотите сделать?:\n [1] - Сортировать таблицу\n [2] - Поиск ключа в таблице \n\
- [3] - Вывод таблицы\n [0] - Завершить\n");
+ [3] - Вывод таблицы\n [4] - Перезаписать файл\n [0] - Завершить\n");
         fscanf(stdin, "%d", &flag);
         switch (flag) {
             case SORT:
-                heap_sort(database, size);
+                if (is_sorted(database, size)) {
+                    printf("Таблица уже отсортирована\n");
+                } else if (is_revsorted(database,size)) {
+                    reverse_data(database,size);
+                } else {
+                    heap_sort(database, size);
+                }
                 break;
 
             case SEARCH:
@@ -73,8 +77,14 @@ int main(int argc, char* argv[]) {
                 printf("Таблица:\n");
                 print_data(database, size);
                 break;
+
+            case REWRITE:
+                rewrite_files(database, filekeys, filedata, size);
+                break;
             
             default:
+                fclose(filekeys);
+                fclose(filedata);
                 free_data(database, size);
                 return 0;
         }
